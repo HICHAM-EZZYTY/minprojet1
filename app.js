@@ -1,8 +1,24 @@
 const express = require('express');
 const app = express();
 
-const path = require('path');
+
+//import routes
+// const users = require('./routes/users');
+// const categories = require('./routes/categories')
+const comments = require('./routes/comments')
+// const posts = require('./routes/posts')
+// const tags = require('./routes/tags')
+// const types = require('./routes/types')
+
+
 const bodyParser = require('body-parser');
+
+
+const cors = require('cors');
+
+app.use(cors());
+
+
 
 
 app.use(bodyParser.json())
@@ -19,35 +35,25 @@ app.use(bodyParser.text({
     type: 'text/html'
 }))
 
-//import routes
-// const users=require('./routes/user');
-
-const cors = require('cors');
-
-app.use(cors());
-
-
-
-
 //Connection with MySQL
 const connection = require('./config/database');
 
 //Models
-
 const Category = require('./models/category');
 const Comment = require('./models/comment');
 const Post = require('./models/post');
 const Tag = require('./models/tag');
-const Type=require('./models/type')
+const Type = require('./models/type')
 const User = require('./models/user');
 
+//Usage of routes
+ //app.use('/categories', categories)
+app.use('/comments',comments)
+// app.use(posts)
+// app.use(tags)
+// app.use(types)
+// app.use(users)
 
-// app.use(Category)
-// app.use(Comment)
-// app.use(Post)
-// app.use(Tag)
-// app.use(Type)
-// app.use(User)
 
 
 
@@ -95,21 +101,8 @@ Comment.belongsTo(Post)
 Post.hasMany(Comment)
 User.hasMany(Comment)
 
-Post.belongsToMany(Tag,{ through: 'Post_Tag' })
-Tag.belongsToMany(Post,{ through: 'Post_Tag' })
-
- 
-
-
-
-
-
-
-
-
-
-
-
+Post.belongsToMany(Tag, { through: 'Post_Tag' })
+Tag.belongsToMany(Post, { through: 'Post_Tag' })
 // app.use(express.static(path.join(__dirname, 'public')))
 
 
@@ -145,44 +138,39 @@ Tag.belongsToMany(Post,{ through: 'Post_Tag' })
 
 // connection.sync({force:true}) Make database drop tables after adding relations
 
-connection.sync({force:true})
+connection.sync({ force: true })
     .then(result => {
 
         app.listen(5000, () => console.log('Server ON'))
 
-        // User.create({
-        //     name: "anas",
-        //     email: "anas@mai.com",
-        //     password: "AHAHAH"
-        // })
-        // Category.create({
-        //     title: "ahmed",
-        //     active: true,
-        // })
-        // Comment.create({
-        //     commentaire: "Commenatie",
-        //     active: true,
-        // })
-        // Post.create({
-        //     title: "hahhaha",
-        //     urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
-        //     description: "frrrrrrrrrr",
-        //     active: true,
-        // })
+        User.create({
+            name: "anas",
+            email: "anas@mai.com",
+            password: "AHAHAH"
+        })
+        Category.create({
+            title: "ahmed",
+            active: true,
+        })
+        Comment.create({
+            commentaire: "Commenatie",
+            active: true,
+        })
+        Post.create({
+            title: "hahhaha",
+            urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
+            description: "frrrrrrrrrr",
+            active: true,
+        })
 
-        // Tag.create({
-        //     name: "kacch",
-        //     active: true,
-        // })
-        // Type.create({
-        //     name: "kakakaka",
-        //     active: true,
-        // })
-
-
-
-
-
+        Tag.create({
+            name: "kacch",
+            active: true,
+        })
+        Type.create({
+            name: "kakakaka",
+            active: true,
+        })
     })
     .catch((err) => {
         console.log('error: ', err)
