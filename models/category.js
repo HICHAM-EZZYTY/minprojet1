@@ -11,6 +11,10 @@ const category = connection.define('category', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    icon: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
     active: {
         type: Sequelize.BOOLEAN,
         allowNull: true
