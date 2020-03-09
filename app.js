@@ -1,12 +1,21 @@
 const express = require('express');
 const app = express();
 
+<<<<<<< HEAD
 
 //import routes
 
 const categories = require('./routes/categories')
 
 
+=======
+//import routes
+
+const users = require('./routes/users');
+const types = require('./routes/types');
+
+const path = require('path');
+>>>>>>> 3e0548121373c12d086f1018c3c680bac2bda614
 const bodyParser = require('body-parser');
 
 
@@ -31,6 +40,17 @@ app.use(bodyParser.text({
     type: 'text/html'
 }))
 
+<<<<<<< HEAD
+=======
+
+const cors = require('cors');
+
+app.use(cors());
+
+
+
+
+>>>>>>> 3e0548121373c12d086f1018c3c680bac2bda614
 //Connection with MySQL
 const connection = require('./config/database');
 
@@ -44,6 +64,21 @@ const User = require('./models/user');
 
 app.use('/categories', categories)
 
+<<<<<<< HEAD
+=======
+
+// app.use('/categories', categories)
+// app.use('/comments', comments)
+// app.use('/posts', posts)
+// app.use('/tags', tags)
+// app.use('/types', types)
+
+
+// app.use('/users', users)
+app.use('/types', types)
+
+
+>>>>>>> 3e0548121373c12d086f1018c3c680bac2bda614
 
 
 User.belongsTo(Type)
@@ -71,13 +106,20 @@ Tag.belongsToMany(Post, {
     through: 'Post_Tag'
 })
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3e0548121373c12d086f1018c3c680bac2bda614
 connection.sync()
     .then(result => {
 
         app.listen(5000, () => console.log('Server ON'))
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 3e0548121373c12d086f1018c3c680bac2bda614
     })
     .catch((err) => {
         console.log('error: ', err)
