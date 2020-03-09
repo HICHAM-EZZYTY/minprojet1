@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 
+//import routes
+
+const users = require('./routes/users');
+const types = require('./routes/types');
+
 const path = require('path');
 const bodyParser = require('body-parser');
 
@@ -19,8 +24,6 @@ app.use(bodyParser.text({
     type: 'text/html'
 }))
 
-//import routes
-// const users=require('./routes/user');
 
 const cors = require('cors');
 
@@ -38,43 +41,22 @@ const Category = require('./models/category');
 const Comment = require('./models/comment');
 const Post = require('./models/post');
 const Tag = require('./models/tag');
-const Type=require('./models/type')
+const Type = require('./models/type')
 const User = require('./models/user');
 
 
-// app.use(Category)
-// app.use(Comment)
-// app.use(Post)
-// app.use(Tag)
-// app.use(Type)
-// app.use(User)
+
+// app.use('/categories', categories)
+// app.use('/comments', comments)
+// app.use('/posts', posts)
+// app.use('/tags', tags)
+// app.use('/types', types)
 
 
+// app.use('/users', users)
+app.use('/types', types)
 
 
-// Relation between comment and post table
-// Comment.belongsTo(Post)  
-// Post.hasMany(Comment)
-
-// Relation between Post and Category table
-// Post.belongsTo(Category)
-// Category.hasMany(Post)
-
-
-// Relation between Comment and USER table
-// Comment.belongsTo(User)
-// User.hasMany(Comment)
-
-// Relation between Post and USER table
-// Post.belongsTo(User)
-// User.hasMany(Post)
-
-// Relation between post and tag table
-// Post.hasMany(Tag)
-// Tag.hasMany(Post)
-
-
-// Relation between user and type table
 
 
 User.belongsTo(Type)
@@ -95,93 +77,18 @@ Comment.belongsTo(Post)
 Post.hasMany(Comment)
 User.hasMany(Comment)
 
-Post.belongsToMany(Tag,{ through: 'Post_Tag' })
-Tag.belongsToMany(Post,{ through: 'Post_Tag' })
-
- 
-
-
-
-
+Post.belongsToMany(Tag, {
+    through: 'Post_Tag'
+})
+Tag.belongsToMany(Post, {
+    through: 'Post_Tag'
+})
 
 
-
-
-
-
-
-// app.use(express.static(path.join(__dirname, 'public')))
-
-
-
-// support json encoded bodies
-
-
-
-
-
-// app.use(users)
-
-
-
-
-// app.use('/create-course', (req, res, next) => {
-//    res.send('<form action="/course" method="post"><input name="title"><button type="submit">Add course</button></form>')
-// });
-
-// app.use('/course', (req, res, next) => {
-//     console.log(req)
-//     res.send('<h1>store course</h1>')
-//  });
-
-
-//  app.use('/', (req, res) => {
-//     res.send('<h1>List courses</h1>')
-// })
-
-
-
-
-
-// connection.sync({force:true}) Make database drop tables after adding relations
-
-connection.sync({force:true})
+connection.sync()
     .then(result => {
 
         app.listen(5000, () => console.log('Server ON'))
-
-        // User.create({
-        //     name: "anas",
-        //     email: "anas@mai.com",
-        //     password: "AHAHAH"
-        // })
-        // Category.create({
-        //     title: "ahmed",
-        //     active: true,
-        // })
-        // Comment.create({
-        //     commentaire: "Commenatie",
-        //     active: true,
-        // })
-        // Post.create({
-        //     title: "hahhaha",
-        //     urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
-        //     description: "frrrrrrrrrr",
-        //     active: true,
-        // })
-
-        // Tag.create({
-        //     name: "kacch",
-        //     active: true,
-        // })
-        // Type.create({
-        //     name: "kakakaka",
-        //     active: true,
-        // })
-
-
-
-
 
     })
     .catch((err) => {
