@@ -72,11 +72,7 @@ connection.sync()
 
         app.listen(5000, () => console.log('Server ON'))
 
-        User.create({
-            name: "anas",
-            email: "anas@mai.com",
-            password: "AHAHAH"
-        })
+
 
 
     })
