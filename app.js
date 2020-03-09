@@ -150,34 +150,34 @@ connection.sync({force:true})
 
         app.listen(5000, () => console.log('Server ON'))
 
-        User.create({
-            name: "anas",
-            email: "anas@mai.com",
-            password: "AHAHAH"
-        })
-        Category.create({
-            title: "ahmed",
-            active: true,
-        })
-        Comment.create({
-            commentaire: "Commenatie",
-            active: true,
-        })
-        Post.create({
-            title: "hahhaha",
-            urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
-            description: "frrrrrrrrrr",
-            active: true,
-        })
+        // User.create({
+        //     name: "anas",
+        //     email: "anas@mai.com",
+        //     password: "AHAHAH"
+        // })
+        // Category.create({
+        //     title: "ahmed",
+        //     active: true,
+        // })
+        // Comment.create({
+        //     commentaire: "Commenatie",
+        //     active: true,
+        // })
+        // Post.create({
+        //     title: "hahhaha",
+        //     urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
+        //     description: "frrrrrrrrrr",
+        //     active: true,
+        // })
 
-        Tag.create({
-            name: "kacch",
-            active: true,
-        })
-        Type.create({
-            name: "kakakaka",
-            active: true,
-        })
+        // Tag.create({
+        //     name: "kacch",
+        //     active: true,
+        // })
+        // Type.create({
+        //     name: "kakakaka",
+        //     active: true,
+        // })
 
 
 
