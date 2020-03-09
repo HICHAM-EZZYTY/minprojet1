@@ -18,7 +18,12 @@ const user = connection.define('user', {
     password: {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    typeId: {
+        type: Sequelize.INTEGER,
+        allowNull: true
     }
+
 });
 
 module.exports = user

@@ -22,11 +22,8 @@ exports.getAllPost = (req, res) => {
             error: true,
             message: 'post not found!'
         }))
+
 }
-
-
-
-
 
 exports.storePost = (req, res) => {
 
@@ -40,33 +37,16 @@ exports.storePost = (req, res) => {
     } = req.body;
 
     Post.create({
-            title: title,
-            description: description,
-            urlImage: urlImage,
-            categoryId: category,
+        title: title,
+        description: description,
+        urlImage: urlImage,
+        categoryId: category,
+    })
+    Tag.create({
+
+            id: tagId,
+            name: tagName,
         })
-        .then((result) => {
-
-            Tag.create({
-
-                id: tagId,
-                name: tagName,
-            })
-
-
-            //     .then((tags) => {
-
-            //         post.setTags([tags])
-
-
-            //     })
-
-            console.log(result)
-        })
-
-
-
-
         .then((post) => res.status(201).json({
             error: false,
             data: post,

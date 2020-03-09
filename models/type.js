@@ -10,7 +10,9 @@ const type = connection.define('type', {
     name: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
+
+
 });
 
 module.exports = type
