@@ -10,10 +10,6 @@ const tag = connection.define('tag', {
     name: {
         type: Sequelize.STRING,
         allowNull: false
-    },
-    active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false
     }
 });
 

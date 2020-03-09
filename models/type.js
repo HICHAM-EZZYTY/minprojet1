@@ -11,10 +11,7 @@ const type = connection.define('type', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false
-    }
+ 
 });
 
 module.exports = type

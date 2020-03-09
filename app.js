@@ -1,25 +1,9 @@
 const express = require('express');
+const app = express();
+
 const path = require('path');
 const bodyParser = require('body-parser');
 
-//import routes
-// const users=require('./routes/user');
-
-const cors = require('cors');
-
-
-
-//Connection with MySQL
-const connection = require('./config/database');
-
-//Models
-
-const User = require('./models/user');
-
-const app = express();
-app.use(cors());
-
-// app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -34,6 +18,100 @@ app.use(bodyParser.raw({
 app.use(bodyParser.text({
     type: 'text/html'
 }))
+
+//import routes
+// const users=require('./routes/user');
+
+const cors = require('cors');
+
+app.use(cors());
+
+
+
+
+//Connection with MySQL
+const connection = require('./config/database');
+
+//Models
+
+const Category = require('./models/category');
+const Comment = require('./models/comment');
+const Post = require('./models/post');
+const Tag = require('./models/tag');
+const Type=require('./models/type')
+const User = require('./models/user');
+
+
+// app.use(Category)
+// app.use(Comment)
+// app.use(Post)
+// app.use(Tag)
+// app.use(Type)
+// app.use(User)
+
+
+
+
+// Relation between comment and post table
+// Comment.belongsTo(Post)  
+// Post.hasMany(Comment)
+
+// Relation between Post and Category table
+// Post.belongsTo(Category)
+// Category.hasMany(Post)
+
+
+// Relation between Comment and USER table
+// Comment.belongsTo(User)
+// User.hasMany(Comment)
+
+// Relation between Post and USER table
+// Post.belongsTo(User)
+// User.hasMany(Post)
+
+// Relation between post and tag table
+// Post.hasMany(Tag)
+// Tag.hasMany(Post)
+
+
+// Relation between user and type table
+
+
+User.belongsTo(Type)
+Type.hasMany(User)
+
+Post.belongsTo(Category)
+Post.belongsTo(User)
+
+Category.hasMany(Post)
+User.hasMany(Post)
+
+
+
+Comment.belongsTo(User)
+Comment.belongsTo(Post)
+
+
+Post.hasMany(Comment)
+User.hasMany(Comment)
+
+Post.belongsToMany(Tag,{ through: 'Post_Tag' })
+Tag.belongsToMany(Post,{ through: 'Post_Tag' })
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+// app.use(express.static(path.join(__dirname, 'public')))
+
 
 
 // support json encoded bodies
@@ -67,16 +145,42 @@ app.use(bodyParser.text({
 
 // connection.sync({force:true}) Make database drop tables after adding relations
 
-connection.sync()
+connection.sync({force:true})
     .then(result => {
 
         app.listen(5000, () => console.log('Server ON'))
 
-        // User.create({
-        //     name: "anas",
-        //     email: "anas@mai.com",
-        //     password: "AHAHAH"
-        // })
+        User.create({
+            name: "anas",
+            email: "anas@mai.com",
+            password: "AHAHAH"
+        })
+        Category.create({
+            title: "ahmed",
+            active: true,
+        })
+        Comment.create({
+            commentaire: "Commenatie",
+            active: true,
+        })
+        Post.create({
+            title: "hahhaha",
+            urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
+            description: "frrrrrrrrrr",
+            active: true,
+        })
+
+        Tag.create({
+            name: "kacch",
+            active: true,
+        })
+        Type.create({
+            name: "kakakaka",
+            active: true,
+        })
+
+
+
 
 
     })
