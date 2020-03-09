@@ -1,23 +1,28 @@
-const connection = require('../config/database');
 const Sequelize = require('sequelize');
+const connection = require('./../config/database');
 
 const user = connection.define('user', {
     id: {
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
-        type: Sequelize.INTEGER
+        autoIncrement: true
     },
     name: {
         type: Sequelize.STRING,
         allowNull: false
     },
     email: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.TEXT,
+        allowNull: true
     },
     password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
     }
-})
+});
 
-module.exports = user;
+module.exports = user
