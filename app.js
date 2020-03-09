@@ -75,7 +75,8 @@ Post.belongsToMany(Tag, {
     through: 'Post_Tag'
 })
 Tag.belongsToMany(Post, {
-    through: 'Post_Tag'
+    through: 'Post_Tag',
+
 })
 
 

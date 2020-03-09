@@ -1,14 +1,18 @@
 const Post = require('./../models/post');
 const Category = require('./../models/category');
-const tag = require('./../models/tag');
+const User = require('./../models/user');
+const Tag = require('./../models/tag');
 
 
 exports.getAllPost = (req, res) => {
 
+
+
     Post.findAll({
             include: [{
-                model: Category,
-                model: tag
+                model: User
+            }, {
+                model: Category
             }]
         })
         .then((post) => {
@@ -31,30 +35,44 @@ exports.storePost = (req, res) => {
         title,
         description,
         urlImage,
-        category,
-        tagId,
-        tagName
+        categoryId,
+        tagName,
+        userId,
     } = req.body;
 
     Post.create({
-        title: title,
-        description: description,
-        urlImage: urlImage,
-        categoryId: category,
-    })
-    Tag.create({
-
-            id: tagId,
-            name: tagName,
+            title: title,
+            description: description,
+            urlImage: urlImage,
+            categoryId: categoryId,
+            userId: userId
         })
+
+
         .then((post) => res.status(201).json({
-            error: false,
-            data: post,
-        }))
+                error: false,
+                data: post,
+
+            }),
+            // Tag.create({
+            //     id: tagId,
+            //     name: tagName,
+            // })
+
+            Tag.create({
+                name: tagName,
+            })
+
+            .then((res) => {
+                PostInstance.setTags()
+            })
+
+        )
         .catch((err) => res.status(400).json({
             error: true,
             message: 'Bad request !'
         }))
+
 
 }
 
