@@ -3,12 +3,12 @@ const app = express();
 
 
 //import routes
-// const users = require('./routes/users');
-// const categories = require('./routes/categories')
+const users = require('./routes/users');
+const categories = require('./routes/categories')
 const comments = require('./routes/comments')
 // const posts = require('./routes/posts')
 // const tags = require('./routes/tags')
-// const types = require('./routes/types')
+const types = require('./routes/types')
 
 
 const bodyParser = require('body-parser');
@@ -47,12 +47,12 @@ const Type = require('./models/type')
 const User = require('./models/user');
 
 //Usage of routes
- //app.use('/categories', categories)
+app.use('/categories', categories)
 app.use('/comments',comments)
+app.use('/users',users)
 // app.use(posts)
 // app.use(tags)
-// app.use(types)
-// app.use(users)
+app.use('/types',types)
 
 
 
