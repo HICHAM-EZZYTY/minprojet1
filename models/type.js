@@ -10,10 +10,6 @@ const type = connection.define('type', {
     name: {
         type: Sequelize.STRING,
         allowNull: false
-    },
-    active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false
     }
 });
 

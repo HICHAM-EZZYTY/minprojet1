@@ -1,25 +1,9 @@
 const express = require('express');
+const app = express();
+
 const path = require('path');
 const bodyParser = require('body-parser');
 
-//import routes
-// const users=require('./routes/user');
-
-const cors = require('cors');
-
-
-
-//Connection with MySQL
-const connection = require('./config/database');
-
-//Models
-
-const User = require('./models/user');
-
-const app = express();
-app.use(cors());
-
-// app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -35,37 +19,79 @@ app.use(bodyParser.text({
     type: 'text/html'
 }))
 
-
-// support json encoded bodies
-
-
-
-
-
-// app.use(users)
-
+//import routes
+// const users = require('./routes/users');
+// const categories = require('./routes/categories')
+// const comments = require('./routes/comments')
+const posts = require('./routes/posts')
+// const tags = require('./routes/tags')
+// const types = require('./routes/types')
 
 
+const cors = require('cors');
 
-// app.use('/create-course', (req, res, next) => {
-//    res.send('<form action="/course" method="post"><input name="title"><button type="submit">Add course</button></form>')
-// });
-
-// app.use('/course', (req, res, next) => {
-//     console.log(req)
-//     res.send('<h1>store course</h1>')
-//  });
-
-
-//  app.use('/', (req, res) => {
-//     res.send('<h1>List courses</h1>')
-// })
+app.use(cors());
 
 
 
 
+//Connection with MySQL
+const connection = require('./config/database');
 
-// connection.sync({force:true}) Make database drop tables after adding relations
+
+//Models
+
+const Category = require('./models/category');
+const Comment = require('./models/comment');
+const Post = require('./models/post');
+const Tag = require('./models/tag');
+const Type = require('./models/type')
+const User = require('./models/user');
+
+//Usage of routes
+//  app.use('/categories', categories)
+//  app.use('/comments', comments)
+app.use('/posts', posts)
+//  app.use('/tags', tags)
+// app.use('/types', types)
+//  app.use('/users', users)
+
+
+
+
+// Relation between User and Type table
+User.belongsTo(Type)
+Type.hasMany(User)
+
+// Relation between Post and User table
+
+
+Post.belongsTo(Category)
+Post.belongsTo(User)
+
+// Relation between Category and User table
+
+Category.hasMany(Post)
+User.hasMany(Post)
+
+// Relation between Post and USER table
+Comment.belongsTo(User)
+Comment.belongsTo(Post)
+
+// Relation between post and tag table
+
+Post.hasMany(Comment)
+User.hasMany(Comment)
+
+
+// Relation between user and type table
+
+Post.belongsToMany(Tag, {
+    through: 'Post_Tag'
+})
+Tag.belongsToMany(Post, {
+    through: 'Post_Tag'
+})
 
 connection.sync()
     .then(result => {
@@ -77,7 +103,36 @@ connection.sync()
         //     email: "anas@mai.com",
         //     password: "AHAHAH"
         // })
+        // Category.create({
+        //     title: "ahmed",
+        //     active: true,
+        // })
+        // Comment.create({
+        //     commentaire: "Commenatie",
+        //     active: true,
+        // })
+        // Post.create({
+        //     title: "hahhaha",
+        //     urlImage: "zzzzzzzzzzzzzzzzzzzzzz",
+        //     description: "frrrrrrrrrr",
+        //     categoryId: 1,
+        //     userId: 1,
+        // })
 
+        // Tag.create({
+        //     id: 1,
+        //     name: "kacch",
+        // })
+
+
+        // Category.create({
+        //     title: "music",
+        //     active: 1,
+        // })
+        // Type.create({
+        //     name: "kakakaka",
+        //     active: true,
+        // })
 
     })
     .catch((err) => {

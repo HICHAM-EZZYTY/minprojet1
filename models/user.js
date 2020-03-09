@@ -18,10 +18,6 @@ const user = connection.define('user', {
     password: {
         type: Sequelize.STRING,
         allowNull: true
-    },
-    active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false
     }
 });
 

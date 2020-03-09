@@ -10,11 +10,6 @@ const comment = connection.define('comment', {
     commentaire: {
         type: Sequelize.TEXT,
         allowNull: true
-    },
-
-    active: {
-        type: Sequelize.BOOLEAN,
-        allowNull: true
     }
 });
 

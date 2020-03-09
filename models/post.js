@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const connection = require('./../config/database');
+const category = require('./category');
 
 const post = connection.define('post', {
     id: {
@@ -20,9 +21,17 @@ const post = connection.define('post', {
         type: Sequelize.TEXT,
         allowNull: true
     },
-    active: {
-        type: Sequelize.BOOLEAN,
+    categoryId: {
+
+        type: Sequelize.INTEGER,
         allowNull: true
+
+    },
+    userId: {
+
+        type: Sequelize.INTEGER,
+        allowNull: true
+
     }
 });
 
