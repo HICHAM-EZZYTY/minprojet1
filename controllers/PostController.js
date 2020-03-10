@@ -63,9 +63,7 @@ exports.storePost = (req, res) => {
                 name: tagName,
             })
 
-            .then((res) => {
-                PostInstance.setTags()
-            })
+
 
         )
         .catch((err) => res.status(400).json({

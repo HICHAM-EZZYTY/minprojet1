@@ -36,7 +36,7 @@ exports.storeUser = (req, res) => {
             name: name,
             email: email,
             password: password,
-            typeId: typeId,
+            typeId: typeId
 
         })
         .then((post) => res.status(201).json({
@@ -45,7 +45,7 @@ exports.storeUser = (req, res) => {
         }))
         .catch((err) => res.status(400).json({
             error: true,
-            message: 'Bad request !'
+            message: 'Bad request  !!!'
         }))
 
 }
