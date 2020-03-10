@@ -71,12 +71,22 @@ Comment.belongsTo(Post)
 Post.hasMany(Comment)
 User.hasMany(Comment)
 
+//     Users.belongsToMany(models.Groups, {
+//       through: 'GroupUsers',
+//       as: 'groups',
+//       foreignKey: 'userId'
+//     });
+
+
 Post.belongsToMany(Tag, {
-    through: 'Post_Tag'
+    through: 'Post_Tag',
+    as:'items'
+
+
 })
 Tag.belongsToMany(Post, {
     through: 'Post_Tag',
-
+    as:'items'
 })
 
 

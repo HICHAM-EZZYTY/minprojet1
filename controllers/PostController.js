@@ -2,6 +2,8 @@ const Post = require('./../models/post');
 const Category = require('./../models/category');
 const User = require('./../models/user');
 const Tag = require('./../models/tag');
+const Post_Tag = require('./../models/post_tag');
+
 
 
 exports.getAllPost = (req, res) => {
@@ -9,11 +11,7 @@ exports.getAllPost = (req, res) => {
 
 
     Post.findAll({
-            include: [{
-                model: User
-            }, {
-                model: Category
-            }]
+            include: [{model: User}, {model: Category}]
         })
         .then((post) => {
             console.log(post)
@@ -31,49 +29,37 @@ exports.getAllPost = (req, res) => {
 
 exports.storePost = (req, res) => {
 
+
+
     let {
         title,
         description,
         urlImage,
         categoryId,
-        tagName,
+        tagName=[],
         userId,
     } = req.body;
 
-    Post.create({
+    Post.create({      
             title: title,
             description: description,
             urlImage: urlImage,
             categoryId: categoryId,
             userId: userId
         })
+        .then(async (post) =>{ 
+            
+            res.status(201).json({error: false,data: post}) 
 
-
-        .then((post) => res.status(201).json({
-                error: false,
-                data: post,
-
-            }),
-            // Tag.create({
-            //     id: tagId,
-            //     name: tagName,
-            // })
-
-            Tag.create({
+            tag = await Tag.create({
                 name: tagName,
-            })
+            });
 
-            .then((res) => {
-                PostInstance.setTags()
-            })
-
-        )
-        .catch((err) => res.status(400).json({
-            error: true,
-            message: 'Bad request !'
-        }))
-
-
+            result = await post.addTags([tag]);
+            console.log(result);
+            
+        })
+        
 }
 
 exports.updatePost = (req, res) => {
