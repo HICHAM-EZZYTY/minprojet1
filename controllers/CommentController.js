@@ -2,6 +2,12 @@ const Comment = require('./../models/comment');
 const User = require('./../models/user');
 const Post = require('./../models/post');
 
+
+
+const {
+    validationResult
+} = require('express-validator');
+
 exports.getAllComments = (req, res) => {
     Comment
         .findAll({
@@ -32,23 +38,34 @@ exports.storeComment = (req, res) => {
         postId
     } = req.body;
 
-    Comment.create({
-            commentaire: commentaire,
-            userId: userId,
-            postId: postId
+    let error = validationResult(req)
 
+    if (error.errors.length) {
+        res.status(400).json({
+            error: true,
+            error: error
         })
-        .then((comment) => {
-            res.status(201).json({
-                error: false,
-                data: comments
+    } else {
+        console.log(Object.keys(error).length);
+
+        Comment.create({
+                commentaire: commentaire,
+                userId: userId,
+                postId: postId
+
             })
-        })
-        .catch((err) => res.status(400).json({
-            erro: true,
-            message: 'comment not found walo !!'
-        }))
+            .then((comment) => {
+                res.status(201).json({
+                    error: false,
+                    data: comments
+                })
+            })
+            .catch((err) => res.status(400).json({
+                erro: true,
+                message: 'comment not found walo !!'
+            }))
 
+    }
 }
 
 exports.updateComment = (req, res) => {
@@ -56,29 +73,39 @@ exports.updateComment = (req, res) => {
     let {
         commentaire
     } = req.body;
+    let error = validationResult(req)
 
-    Comment.update({
-            commentaire: commentaire,
-        }, {
-            where: {
-                id: req.params.id
-            }
+    if (error.errors.length) {
+        res.status(400).json({
+            error: true,
+            error: error
         })
-        .then((result) => {
-            res.status(202).json({
-                error: false,
-                data: result
+    } else {
+        console.log(Object.keys(error).length);
+
+        Comment.update({
+                commentaire: commentaire,
+            }, {
+                where: {
+                    id: req.params.id
+                }
             })
-        })
-        .catch((err) => {
-            res.status(400).json({
-                error: true,
-                message: "bad request !"
+            .then((result) => {
+                res.status(202).json({
+                    error: false,
+                    data: result
+                })
             })
-        })
+            .catch((err) => {
+                res.status(400).json({
+                    error: true,
+                    message: "bad request !"
+                })
+            })
+    }
 }
 
-exports.showOneComment = async (req, res) => {
+exports.showOneComment = async(req, res) => {
     try {
         let comment = await Comment.findByPk(req.params.id);
         return res.status(200).json({
@@ -100,21 +127,34 @@ exports.deleteComment = (req, res) => {
 
 
 exports.patchComment = (req, res) => {
-    Comment.update(req.body, {
-            where: {
-                id: req.params.id
-            }
+
+    let error = validationResult(req)
+
+    if (error.errors.length) {
+        res.status(400).json({
+            error: true,
+            error: error
         })
-        .then(result => {
-            res.status(200).json({
-                error: false,
-                data: result
+    } else {
+        console.log(Object.keys(error).length);
+
+
+        Comment.update(req.body, {
+                where: {
+                    id: req.params.id
+                }
             })
-        })
-        .catch((error) => {
-            res.status(400).json({
-                error: true,
-                message: "Bad request"
+            .then(result => {
+                res.status(200).json({
+                    error: false,
+                    data: result
+                })
             })
-        })
+            .catch((error) => {
+                res.status(400).json({
+                    error: true,
+                    message: "Bad request"
+                })
+            })
+    }
 }
