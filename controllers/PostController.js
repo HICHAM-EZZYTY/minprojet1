@@ -2,7 +2,10 @@ const Post = require('./../models/post');
 const Category = require('./../models/category');
 const User = require('./../models/user');
 const Tag = require('./../models/tag');
-const Post_Tag = require('./../models/post_tag');
+const Comment = require('./../models/comment');
+const {
+    validationResult
+} = require('express-validator');
 
 
 
@@ -11,7 +14,18 @@ exports.getAllPost = (req, res) => {
 
 
     Post.findAll({
-            include: [{model: User}, {model: Category}]
+            include: [{
+                model: User
+            }, {
+                model: Category
+            }, {
+                model: Comment,
+                include: [{
+                    model: User
+                }]
+            }, {
+                model: Tag
+            }]
         })
         .then((post) => {
             console.log(post)
@@ -30,36 +44,60 @@ exports.getAllPost = (req, res) => {
 exports.storePost = (req, res) => {
 
 
+    // let postId;
+    // let tagId;
 
     let {
         title,
         description,
         urlImage,
         categoryId,
-        tagName=[],
+        tagName,
         userId,
     } = req.body;
+    let error = validationResult(req)
 
-    Post.create({      
-            title: title,
-            description: description,
-            urlImage: urlImage,
-            categoryId: categoryId,
-            userId: userId
+    if (error.errors.length) {
+        res.status(400).json({
+            error: true,
+            error: error
         })
-        .then(async (post) =>{ 
-            
-            res.status(201).json({error: false,data: post}) 
+    } else {
+        console.log(Object.keys(error).length);
 
-            tag = await Tag.create({
-                name: tagName,
-            });
+        Post.create({
+                title: title,
+                description: description,
+                urlImage: urlImage,
+                categoryId: categoryId,
+                userId: userId
+            })
+            .then(async(post) => {
 
-            result = await post.addTags([tag]);
-            console.log(result);
-            
-        })
-        
+                res.status(201).json({
+                    error: false,
+                    data: post
+                })
+
+                myTags = [];
+
+                for (let i = 0; i < tagName.length; i++) {
+
+                    tag = await Tag.create({
+                        name: tagName[i],
+                    });
+
+                    myTags = [...myTags, tag]
+
+                }
+
+                result = await post.addTags(myTags);
+
+                console.log(result);
+
+            })
+    }
+
 }
 
 exports.updatePost = (req, res) => {

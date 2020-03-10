@@ -1,5 +1,9 @@
 const Type = require('./../models/type');
 
+const {
+    validationResult
+} = require('express-validator');
+
 exports.getAllTypes = (req, res) => {
 
     Type
@@ -25,20 +29,31 @@ exports.storeType = (req, res) => {
 
     } = req.body;
 
-    Type.create({
-            name: name,
+    let error = validationResult(req)
 
-
-        })
-        .then((type) => res.status(201).json({
-            error: false,
-            data: type
-        }))
-        .catch((err) => res.status(400).json({
+    if (error.errors.length) {
+        res.status(400).json({
             error: true,
-            message: 'Bad request !'
-        }))
+            error: error
+        })
+    } else {
+        console.log(Object.keys(error).length);
 
+        Type.create({
+                name: name,
+
+
+            })
+            .then((type) => res.status(201).json({
+                error: false,
+                data: type
+            }))
+            .catch((err) => res.status(400).json({
+                error: true,
+                message: 'Bad request !'
+            }))
+
+    }
 }
 
 exports.updateType = (req, res) => {
@@ -48,26 +63,35 @@ exports.updateType = (req, res) => {
 
     } = req.body;
 
-    Type.update({
-            name: name,
+    if (error.errors.length) {
+        res.status(400).json({
+            error: true,
+            error: error
+        })
+    } else {
+        console.log(Object.keys(error).length);
 
-        }, {
-            where: {
-                id: req.params.id
-            }
-        })
-        .then((result) => {
-            res.status(202).json({
-                error: false,
-                data: result
+        Type.update({
+                name: name,
+
+            }, {
+                where: {
+                    id: req.params.id
+                }
             })
-        })
-        .catch((err) => {
-            res.status(400).json({
-                error: true,
-                message: "bad request !"
+            .then((result) => {
+                res.status(202).json({
+                    error: false,
+                    data: result
+                })
             })
-        })
+            .catch((err) => {
+                res.status(400).json({
+                    error: true,
+                    message: "bad request !"
+                })
+            })
+    }
 }
 
 
@@ -109,22 +133,31 @@ exports.deleteType = (req, res) => {
 
 exports.patchType = (req, res) => {
 
-    Type.update(req.body, {
-            where: {
-                id: req.params.id
-            }
+    if (error.errors.length) {
+        res.status(400).json({
+            error: true,
+            error: error
         })
-        .then(result => {
-            res.status(200).json({
-                error: false,
-                data: result
-            })
-        })
-        .catch((error) => {
-            res.status(400).json({
-                error: true,
-                message: "Bad request"
-            })
-        })
+    } else {
+        console.log(Object.keys(error).length);
 
+        Type.update(req.body, {
+                where: {
+                    id: req.params.id
+                }
+            })
+            .then(result => {
+                res.status(200).json({
+                    error: false,
+                    data: result
+                })
+            })
+            .catch((error) => {
+                res.status(400).json({
+                    error: true,
+                    message: "Bad request"
+                })
+            })
+
+    }
 }
