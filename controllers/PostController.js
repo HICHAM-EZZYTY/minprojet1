@@ -7,6 +7,11 @@ const {
     validationResult
 } = require('express-validator');
 
+// var multer = require('multer');
+// var upload = multer({
+//     dest: 'uploads/'
+// });
+
 
 
 exports.getAllPost = (req, res) => {
@@ -47,6 +52,9 @@ exports.storePost = (req, res) => {
     // let postId;
     // let tagId;
 
+    // console.log(req.file)
+    // return;
+
     let {
         title,
         description,
@@ -63,16 +71,15 @@ exports.storePost = (req, res) => {
             error: error
         })
     } else {
-        console.log(Object.keys(error).length);
 
         Post.create({
                 title: title,
                 description: description,
-                urlImage: urlImage,
+                urlImage: req.file.originalname,
                 categoryId: categoryId,
                 userId: userId
             })
-            .then(async(post) => {
+            .then(async (post) => {
 
                 res.status(201).json({
                     error: false,

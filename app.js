@@ -15,6 +15,7 @@ const bodyParser = require('body-parser');
 
 
 
+
 app.use(cors());
 
 
@@ -80,13 +81,13 @@ User.hasMany(Comment)
 
 Post.belongsToMany(Tag, {
     through: 'Post_Tag',
-    as:'items'
+    as: 'items'
 
 
 })
 Tag.belongsToMany(Post, {
     through: 'Post_Tag',
-    as:'items'
+    as: 'items'
 })
 
 
