@@ -1,8 +1,12 @@
 const Category = require('./../models/category');
+const {
+    validationResult
+} = require('express-validator');
+
 
 exports.getAllCategories = (req, res) => {
 
-    
+
     Category
         .findAll()
         .then((categories) => {
@@ -28,47 +32,71 @@ exports.storeCategory = (req, res) => {
         active
     } = req.body;
 
-    Category.create({
-            title: title,
-            icon: icon,
-            active: active
-        })
-        .then((category) => res.status(201).json({
-            error: false,
-            data: category
-        }))
-        .catch((err) => res.status(400).json({
+
+    let error = validationResult(req)
+
+    if (error.errors.length) {
+        res.status(400).json({
             error: true,
-            message: 'Please check the data for category'
-        }))
+            error: error
+        })
+    } else {
+        console.log(Object.keys(error).length);
+
+        Category.create({
+                title: title,
+                icon: icon,
+                active: active
+            })
+            .then((category) => res.status(201).json({
+                error: false,
+                data: category
+            }))
+            .catch((err) => res.status(400).json({
+                error: true,
+                message: 'Please check the data for category'
+            }))
+    }
 
 }
 
 exports.updateCategory = (req, res) => {
-    console.log(req.body)
+
+    // console.log(req.body)
     let {
         title,
         icon,
         active
     } = req.body;
 
-    Category.update({
-            title: title,
-            icon: icon,
-            active: (active == 'on') ? 1 : 0
-        }, {
-            where: {
-                id: req.params.id
-            }
-        })
-        .then((result) => res.status(202).json({
-            error: false,
-            data: result
-        }))
-        .catch((err) => res.status(400).json({
+    let error = validationResult(req)
+
+    if (error.errors.length) {
+        res.status(400).json({
             error: true,
-            message: "bad request !"
-        }))
+            error: error
+        })
+    } else {
+        console.log(Object.keys(error).length);
+
+        Category.update({
+                title: title,
+                icon: icon,
+                active: (active == 'on') ? 1 : 0
+            }, {
+                where: {
+                    id: req.params.id
+                }
+            })
+            .then((result) => res.status(202).json({
+                error: false,
+                data: result
+            }))
+            .catch((err) => res.status(400).json({
+                error: true,
+                message: "bad request !"
+            }))
+    }
 }
 
 exports.showOneCategory = async (req, res) => {
@@ -94,19 +122,32 @@ exports.deleteCategory = (req, res) => {
 }
 
 exports.patchCategory = (req, res) => {
-    Category.update(req.body, {
-        where: {
-            id: req.params.id
-        }
-    }).then(result => {
-        res.status(200).json({
-            error: false,
-            data: result
-        })
-    }).catch((error) => {
+
+    let error = validationResult(req)
+
+    if (error.errors.length) {
         res.status(400).json({
             error: true,
-            message: "Bad request"
+            error: error
         })
-    })
+    } else {
+
+        console.log(Object.keys(error).length);
+
+        Category.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        }).then(result => {
+            res.status(200).json({
+                error: false,
+                data: result
+            })
+        }).catch((error) => {
+            res.status(400).json({
+                error: true,
+                message: "Bad request"
+            })
+        })
+    }
 }
