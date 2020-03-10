@@ -1,5 +1,8 @@
 const User = require('./../models/user');
 const Type = require('./../models/type');
+const {
+    validationResult
+} = require('express-validator');
 
 exports.getAllUsers = (req, res) => {
 
@@ -23,6 +26,8 @@ exports.getAllUsers = (req, res) => {
 
 }
 
+
+
 exports.storeUser = (req, res) => {
 
     let {
@@ -32,21 +37,41 @@ exports.storeUser = (req, res) => {
         typeId,
     } = req.body;
 
-    User.create({
-            name: name,
-            email: email,
-            password: password,
-            typeId: typeId
+    let error = validationResult(req)
 
-        })
-        .then((post) => res.status(201).json({
-            error: false,
-            data: post
-        }))
-        .catch((err) => res.status(400).json({
+    if (error.errors.length) {
+        // res.send(error)
+        res.status(400).json({
             error: true,
-            message: 'Bad request  !!!'
-        }))
+            error: error
+        })
+
+    } else {
+
+        console.log(Object.keys(error).length);
+        User.create({
+                name: name,
+                email: email,
+                password: password,
+                typeId: typeId
+
+            })
+            .then((post) => res.status(201).json({
+                error: false,
+                data: post
+            }))
+            .catch((err) => res.status(400).json({
+                error: true,
+                message: 'Bad request  !!!'
+            }))
+
+    }
+
+
+
+
+
+
 
 }
 
@@ -59,31 +84,39 @@ exports.updateUser = (req, res) => {
         typeId: typeId,
     } = req.body;
 
-    User.update({
-            name: name,
-            email: email,
-            password: password,
-            typeId: typeId,
-        }, {
-            where: {
-                id: req.params.id
-            }
-        })
-        .then((result) => {
-            res.status(202).json({
-                error: false,
-                data: result
+    let error = validationResult(req)
+
+    if (Object.keys(error['errors']).length === 1) {
+        res.send(error)
+    } else {
+
+        // console.log(Object.keys(error).length);
+
+        User.update({
+                name: name,
+                email: email,
+                password: password,
+                typeId: typeId,
+            }, {
+                where: {
+                    id: req.params.id
+                }
             })
-        })
-        .catch((err) => {
-            res.status(400).json({
-                error: true,
-                message: "bad request !"
+            .then((result) => {
+                res.status(202).json({
+                    error: false,
+                    data: result
+                })
             })
-        })
+            .catch((err) => {
+                res.status(400).json({
+                    error: true,
+                    message: "bad request !"
+                })
+            })
+    }
+
 }
-
-
 
 
 exports.showOneUser = (req, res) => {
@@ -105,22 +138,32 @@ exports.showOneUser = (req, res) => {
 
 exports.patchUser = (req, res) => {
 
-    User.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        })
-        .then(result => {
-            res.status(200).json({
-                error: false,
-                data: result
+    let error = validationResult(req)
+    console.log(error);
+
+    if (Object.keys(error['errors']).length === 1) {
+        res.send(error)
+
+    } else {
+
+
+        User.update(req.body, {
+                where: {
+                    id: req.params.id
+                }
             })
-        })
-        .catch((error) => {
-            res.status(400).json({
-                error: true,
-                message: "Bad request"
+            .then(result => {
+                res.status(200).json({
+                    error: false,
+                    data: result
+                })
             })
-        })
+            .catch((error) => {
+                res.status(400).json({
+                    error: true,
+                    message: "Bad request"
+                })
+            })
+    }
 
 }
