@@ -1,6 +1,7 @@
 const express = require('express');
 const PostController = require('./../controllers/PostController');
 var multer = require('multer');
+const isAuth = require('./../middleware/is-auth');
 
 
 
@@ -45,10 +46,10 @@ var upload = multer({
 
 
 
-router.post('', upload.single('urlImage'), chekData, PostController.storePost);
-router.put('/:id', chekData, PostController.updatePost);
+router.post('', isAuth, upload.single('urlImage'), chekData, PostController.storePost);
+router.put('/:id', isAuth, chekData, PostController.updatePost);
 router.get('/:id', PostController.showOnePost);
-router.patch('/:id', chekData, PostController.patchPost);
-router.delete('/:id', PostController.deletePost);
+router.patch('/:id', isAuth, chekData, PostController.patchPost);
+router.delete('/:id', isAuth, PostController.deletePost);
 
 module.exports = router;
