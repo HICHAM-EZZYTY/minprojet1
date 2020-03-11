@@ -9,6 +9,7 @@ const categories = require('./routes/categories')
 const comments = require('./routes/comments')
 const posts = require('./routes/posts')
 const types = require('./routes/types')
+const auth = require('./routes/auth')
 
 
 const bodyParser = require('body-parser');
@@ -52,6 +53,7 @@ app.use('/comments', comments)
 app.use('/users', users)
 app.use('/posts', posts)
 app.use('/types', types)
+app.use(auth)
 
 
 User.belongsTo(Type)
@@ -131,6 +133,7 @@ Tag.belongsToMany(Post, {
     through: 'Post_Tag'
 })
 
+//connection.sync({force: true})
 connection.sync()
     .then(result => {
 

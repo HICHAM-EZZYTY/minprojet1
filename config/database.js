@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const connection = new Sequelize('p3_nodejs', 'root', '', {
+const connection = new Sequelize('nodejs_youcode', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
     port: 3306
